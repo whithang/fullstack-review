@@ -13,20 +13,19 @@ var promiseDB = mongoose.connect('mongodb://localhost/fetcher', {
 promiseDB.then(function() {
   mongoose.connection.db.dropDatabase();
   let repos = mongoose.Schema({
-    _id: Number,
+    repo_id: {type: Number, unique: true},
     name: String,
-    owner: {
-      login: { type: String, index: true },
-      id: Number,
-      avatar_url: String
-    },
+    owner_id: Number,
+    owner_name: { type: String, index: true },
+    owner_avatar_url: String,
     created_at: Date,
     updated_at: Date,
     pushed_at: Date,
     default_branch: String
   });
 
-  let Repo = mongoose.model('Repo', repos);
+  module.exports.Repo = mongoose.model('Repo', repos);
+  // code for importing sample data
 
   // data.forEach((repo) => {
   //   var cleanRecord = {};
@@ -48,16 +47,18 @@ promiseDB.then(function() {
   // });
 
   // var tempRepo = new Repo(cleanRecord);
-  module.exports.tempRepo = function(record) {
-    return new Repo(record);
-  };
+  // module.exports.tempRepo = function(record) {
+  //   return new module.exports.Repo(record);
+    //refactor to only send above one exported
+  // };
 
   let save = (repo) => {
     repo.save(function(err, repo) {
       if (err) {
-        return console.error(err);}
+        return console.error(err);
+      }
     });
-  }
+  };
 
   module.exports.save = save;
 });
