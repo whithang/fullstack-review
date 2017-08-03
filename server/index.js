@@ -13,7 +13,6 @@ app.post('/repos', function (req, res) {
   }).on('end', () => {
     username = Buffer.concat(username).toString();
     username = username.slice(1, username.length - 1);
-    console.log('********username passed ', username);
     helpers.getReposByUsername(username);
       // , function(repos) {
       // console.log('*********repos returned ', repos);

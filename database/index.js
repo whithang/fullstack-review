@@ -27,7 +27,6 @@ promiseDB.then(function() {
   });
 
   let Repo = mongoose.model('Repo', repos);
-  var count = Repo.count();
 
   // data.forEach((repo) => {
   //   var cleanRecord = {};
@@ -47,9 +46,18 @@ promiseDB.then(function() {
   //     if (err) {return console.error(err);}
   //   });
   // });
-});
 
-let save = (repo) => {
-  if (err) { return console.error(err);}
-}
-module.exports.save = save;
+  // var tempRepo = new Repo(cleanRecord);
+  module.exports.tempRepo = function(record) {
+    return new Repo(record);
+  };
+
+  let save = (repo) => {
+    repo.save(function(err, repo) {
+      if (err) {
+        return console.error(err);}
+    });
+  }
+
+  module.exports.save = save;
+});
