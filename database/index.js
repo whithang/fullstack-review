@@ -1,16 +1,55 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+var data = require('../data');
 
-let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+// assert.equal(query.exec().constructor, require('bluebird'));
+
+var promiseDB = mongoose.connect('mongodb://localhost/fetcher', {
+  useMongoClient: true
+  }, function(error, db) {
+    console.error.bind(console, 'connection error:')
 });
 
-let Repo = mongoose.model('Repo', repoSchema);
+promiseDB.then(function() {
+  mongoose.connection.db.dropDatabase();
+  let repos = mongoose.Schema({
+    _id: Number,
+    name: String,
+    owner: {
+      login: { type: String, index: true },
+      id: Number,
+      avatar_url: String
+    },
+    created_at: Date,
+    updated_at: Date,
+    pushed_at: Date,
+    default_branch: String
+  });
 
-let save = (/* TODO */) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
+  let Repo = mongoose.model('Repo', repos);
+  var count = Repo.count();
+
+  // data.forEach((repo) => {
+  //   var cleanRecord = {};
+  //   cleanRecord['_id'] = repo.id;
+  //   cleanRecord['name'] = repo.name;
+  //   cleanRecord['owner'] = {
+  //     login: repo.owner.login,
+  //     id: repo.owner.id,
+  //     avatar_url: repo.owner.avatar_url
+  //   };
+  //   cleanRecord['created_at'] = repo.created_at;
+  //   cleanRecord['updated_at'] = repo.updated_at;
+  //   cleanRecord['pushed_at'] = repo.pushed_at;
+  //
+  //   var tempRepo = new Repo(cleanRecord);
+  //   tempRepo.save(function (err, tempRepo) {
+  //     if (err) {return console.error(err);}
+  //   });
+  // });
+});
+
+let save = (repo) => {
+  if (err) { return console.error(err);}
 }
-
 module.exports.save = save;

@@ -3,19 +3,30 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
+var server_url = 'http://127.0.0.1:1128';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       repos: []
     }
 
   }
 
   search (term) {
-    console.log(`${term} was searched`);
-    // TODO
+    $.ajax({
+      method: 'POST',
+      url: server_url + '/repos',
+      data: JSON.stringify(term),
+      success: function(repos) {
+      //display repos
+      console.log(`${term} was searched`);
+      },
+      error: function(err, msg) {
+        alert('Request failed: ' + msg);
+      }
+    });
   }
 
   render () {
