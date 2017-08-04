@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   updateRepoList (repos) {
-    this.setState({repos: repos});
+    this.setState({repos: this.state.repos.concat(repos)});
   }
 
   search (term) {
@@ -27,7 +27,7 @@ class App extends React.Component {
       url: server_url + '/repos',
       data: JSON.stringify(term),
       success: function() {
-        console.log(`${term} was searched`);
+        // console.log(`${term} was searched`);
         context.getDataSet();
       },
       error: function(err, msg) {
@@ -44,7 +44,7 @@ class App extends React.Component {
       url: server_url + '/repos',
       // data: JSON.stringify(term),
       success: function(repos) {
-        console.log('*****updating repoList with ', repos);
+        // console.log('*****updating repoList with ', repos);
         context.updateRepoList(repos);
       },
       error: function(err, msg) {
